@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ru.safronov</groupId>
+  <artifactId>first-cucumber</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <cucumber-java.version>5.7.0</cucumber-java.version>
+    <cucumber-junit.version>5.7.0</cucumber-junit.version>
+    <cucumber-core.version>5.7.0</cucumber-core.version>
+    <allure-cucumber5-jvm.version>2.22.2</allure-cucumber5-jvm.version>
+    <rest-assured.version>5.3.0</rest-assured.version>
+    <jackson-databind.version>2.15.2</jackson-databind.version>
+    <jsoup.version>1.16.1</jsoup.version>
+    <selenium-java.version>4.10.0</selenium-java.version>
+    <owner.version>1.0.12</owner.version>
+    <lombok.version>1.18.28</lombok.version>
+    <allure-maven.version>2.12.0</allure-maven.version>
+    <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+    <aspectj.version>1.9.19</aspectj.version>
+  </properties>
+
+  <dependencies>
+    <!--Реализация Cucumber для Java -->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-java</artifactId>
+      <version>${cucumber-java.version}</version>
+    </dependency>
+
+    <!--Для использования JUnit4 во фреймворке-->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-junit</artifactId>
+      <version>${cucumber-junit.version}</version>
+    </dependency>
+
+    <!--Основная логика выполнения функциой Cucumber-->
+    <dependency>
+      <groupId>io.cucumber</groupId>
+      <artifactId>cucumber-core</artifactId>
+      <version>${cucumber-core.version}</version>
+    </dependency>
+
+    <!-- ALLURE -->
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-cucumber5-jvm</artifactId>
+      <version>${allure-cucumber5-jvm.version}</version>
+    </dependency>
+
+    <!--Инструмент для тестирования API-->
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${rest-assured.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-databind.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>${jsoup.version}</version>
+    </dependency>
+
+    <!-- SELENIUM -->
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium-java.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.aeonbits.owner</groupId>
+      <artifactId>owner</artifactId>
+      <version>${owner.version}</version>
+    </dependency>
+
+    <!--Библиотека для сокращения шаблонного кода в классах-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <configuration>
+          <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+          <reportDirectory>${project.build.directory}/allure-reports</reportDirectory>
+        </configuration>
+        <version>${allure-maven.version}</version>
+      </plugin>
+
+      <!--Плагин для гибкого запуска тестов, управления тестами, управления отчетами-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <argLine>
+            -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+            -Dcucumber.options="--plugin io.qameta.allure.cucumber5jvm.AllureCucumber5Jvm"
+          </argLine>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
